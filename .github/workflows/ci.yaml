@@ -65,11 +65,11 @@ jobs:
               uses: docker/build-push-action@v6
               with:
                 context: src/product-catalog
-                file: Dockerfile
+                file: src/product-catalog/Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
 
-    deploy:
+    updatek8s:
         runs-on: ubuntu-latest
         needs: docker-build
         steps:
@@ -80,7 +80,7 @@ jobs:
             
             - name: Update Kubernetes Deployment Manifest
               run: |
-                sed -i "s/image: .*/image: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}/" kubernetes/productcatalog/deploy.yaml
+                sed -i "s|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}|" kubernetes/productcatalog/deploy.yaml
 
             - name: Commit and Push Changes
               run: |
