@@ -69,7 +69,7 @@ jobs:
                 push: true
                 tags: ${{ secrets.DOCKER_USERNAME }}/product-catalog:${{github.run_id}}
 
-    updatek8s:
+    updatek8s-manifest:
         runs-on: ubuntu-latest
         needs: docker-build
         steps:
